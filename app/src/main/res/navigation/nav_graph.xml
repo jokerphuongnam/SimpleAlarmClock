@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/alarmsListFragment">
+
+    <fragment
+        android:id="@+id/alarmsListFragment"
+        android:name="com.learntodroid.simplealarmclock.alarmslist.AlarmsListFragment"
+        android:label="Alarm List"
+        tools:layout="@layout/fragment_listalarms">
+        <action
+            android:id="@+id/action_alarmsListFragment_to_createAlarmFragment"
+            app:destination="@id/createAlarmFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAlarmFragment"
+        android:name="com.learntodroid.simplealarmclock.createalarm.CreateAlarmFragment"
+        android:label="Create Alarm"
+        tools:layout="@layout/fragment_createalarm">
+        <action
+            android:id="@+id/action_createAlarmFragment_to_alarmsListFragment"
+            app:destination="@id/alarmsListFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+    </fragment>
+</navigation>
