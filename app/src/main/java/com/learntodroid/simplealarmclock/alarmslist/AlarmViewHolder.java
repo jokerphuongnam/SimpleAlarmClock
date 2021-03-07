@@ -58,11 +58,9 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
             alarmTitle.setText(format("%s | %d | %d", "Alarm", alarm.getAlarmId(), alarm.getCreated()));
         }
 
-        alarmStarted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                listener.onToggle(alarm);
-            }
+        alarmStarted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            alarm.setRecurring(isChecked);
+            listener.onToggle(alarm);
         });
     }
 }

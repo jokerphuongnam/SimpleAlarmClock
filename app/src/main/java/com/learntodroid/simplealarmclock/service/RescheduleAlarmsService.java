@@ -28,7 +28,11 @@ public class RescheduleAlarmsService extends LifecycleService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        alarmRepository.getAlarms().observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(alarms -> {
+        //noinspection ResultOfMethodCallIgnored
+        alarmRepository.getAlarms()
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(alarms -> {
             for (Alarm a : alarms) {
                 if (a.isStarted()) {
                     a.schedule(getApplicationContext());

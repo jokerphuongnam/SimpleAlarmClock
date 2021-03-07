@@ -2,16 +2,12 @@ package com.learntodroid.simplealarmclock.fcm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -21,9 +17,6 @@ import com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceive
 import com.learntodroid.simplealarmclock.data.Alarm;
 
 import java.util.Map;
-import java.util.Random;
-
-import static android.content.ContentValues.TAG;
 
 /*
 * Cac ham ...online chi nhan tin hieu, data da dc web luu vao firestore
@@ -38,14 +31,7 @@ public class RemoteService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         Map<String, String> datas = remoteMessage.getData();
-        Log.i(TAG, "da nhan dc tin nhan");
         String type = datas.get("type"); // message co type
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "Da nhan dc",Toast.LENGTH_SHORT).show();
-            }
-        });
         int id = Integer.parseInt(datas.get("alarmId")); // id
         String title;
 
@@ -85,6 +71,7 @@ public class RemoteService extends FirebaseMessagingService {
 
         Log.i("cancel", "cancel alarm");
     }
+
     void scheduleAlarmOnline(int alarmId,int hour, int minute, String title) {
        // int alarmId = new Random().nextInt(Integer.MAX_VALUE);
 
@@ -115,7 +102,5 @@ public class RemoteService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        System.out.println("---------------------------get token");
-        System.out.println(s);
     }
 }

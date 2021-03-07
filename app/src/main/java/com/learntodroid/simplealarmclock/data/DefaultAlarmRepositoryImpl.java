@@ -5,11 +5,8 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -25,24 +22,17 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
     }
 
     @Override
-    public Single<List<Alarm>> insert(Alarm alarm) {
-        AlarmDatabase.databaseWriteExecutor.execute(() -> {
-            local.insert(alarm);
-        });
+    public Single<String> insert(Alarm alarm) {
         return network.insert(alarm);
     }
 
     @Override
-    public Single<List<Alarm>> update(Alarm alarm) {
-        AlarmDatabase.databaseWriteExecutor.execute(() -> {
-            local.update(alarm);
-        });
+    public Single<String> update(Alarm alarm) {
         return network.update(alarm);
     }
 
     @Override
     public Single<List<Alarm>> delete(Alarm alarm) {
-//        SystemClock.sleep(1000);
         return Single.create(emitter -> {
             AlarmDatabase.databaseWriteExecutor.execute(() -> {
                 local.delete(alarm);
@@ -61,16 +51,14 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
             subscribe.add(local.getAlarms().subscribe(localAlarms -> {
                 AlarmDatabase.databaseWriteExecutor.execute(() -> {
                     local.deleteAll();
-                    if (localAlarms == null || localAlarms.isEmpty()) {
-                        subscribe.add(network.getAlarms().subscribe(networkAlarm -> {
-                            if (networkAlarm == null || networkAlarm.isEmpty()) {
-                                emitter.onSuccess(new ArrayList<>());
-                                return;
-                            }
+                    subscribe.add(network.getAlarms().subscribe(networkAlarm -> {
+                        if (networkAlarm == null || networkAlarm.isEmpty()) {
+                            emitter.onSuccess(new ArrayList<>());
+                        } else {
                             emitter.onSuccess(networkAlarm);
                             networkAlarm.forEach(local::insert);
-                        }));
-                    }
+                        }
+                    }));
                 });
             }));
             SystemClock.sleep(500);

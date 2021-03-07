@@ -81,12 +81,9 @@ public class CreateAlarmFragment extends Fragment {
             }
         });
 
-        scheduleAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scheduleAlarm();
-                Navigation.findNavController(v).navigate(R.id.action_createAlarmFragment_to_alarmsListFragment);
-            }
+        scheduleAlarm.setOnClickListener(v -> {
+            scheduleAlarm();
+            Navigation.findNavController(v).navigate(R.id.action_createAlarmFragment_to_alarmsListFragment);
         });
 
         return view;

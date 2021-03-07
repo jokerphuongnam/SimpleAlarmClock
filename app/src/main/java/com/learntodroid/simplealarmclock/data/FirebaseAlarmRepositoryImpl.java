@@ -8,7 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -53,7 +52,7 @@ public class FirebaseAlarmRepositoryImpl implements AlarmNetwork {
     }
 
     @Override
-    public Single<List<Alarm>> insert(Alarm alarm) {
+    public Single<String> insert(Alarm alarm) {
         fb.collection("alarms").document(String.valueOf(alarm.getAlarmId())).set(alarm, SetOptions.merge());
 
 //        AlarmDatabase.databaseWriteExecutor.execute(() -> {
@@ -63,7 +62,7 @@ public class FirebaseAlarmRepositoryImpl implements AlarmNetwork {
     }
 
     @Override
-    public Single<List<Alarm>> update(Alarm alarm) {
+    public Single<String> update(Alarm alarm) {
         fb.collection("alarms").document(String.valueOf(alarm.getAlarmId())).set(alarm, SetOptions.merge());
 //        AlarmDatabase.databaseWriteExecutor.execute(() -> {
 //            alarmDao.update(alarm);

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
@@ -12,11 +13,10 @@ import io.reactivex.rxjava3.core.Single;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public class RetrofitAlarmImpl implements AlarmNetwork {
@@ -30,17 +30,43 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
         return instance;
     }
 
+    private final Locale locale;
+
     private RetrofitAlarmImpl() {
+        locale = Locale.getDefault();
     }
 
     @Override
-    public Single<List<Alarm>> insert(Alarm alarm) {
-        return getHandle().insert(alarm);
+    public Single<String> insert(Alarm alarm) {
+        return getHandle().insert(
+                String.format(locale,"%02d:%02d", alarm.getHour(), alarm.getMinute()),
+                alarm.getTitle(),
+                alarm.isRecurring(),
+                alarm.isMonday(),
+                alarm.isTuesday(),
+                alarm.isWednesday(),
+                alarm.isThursday(),
+                alarm.isFriday(),
+                alarm.isSaturday(),
+                alarm.isSunday()
+        );
     }
 
     @Override
-    public Single<List<Alarm>> update(Alarm alarm) {
-        return getHandle().update(alarm);
+    public Single<String> update(Alarm alarm) {
+        return getHandle().update(
+                alarm.getAlarmId(),
+                String.format(locale,"%02d:%02d", alarm.getHour(), alarm.getMinute()),
+                alarm.getTitle(),
+                alarm.isRecurring(),
+                alarm.isMonday(),
+                alarm.isTuesday(),
+                alarm.isWednesday(),
+                alarm.isThursday(),
+                alarm.isFriday(),
+                alarm.isSaturday(),
+                alarm.isSunday()
+        );
     }
 
     @Override
@@ -55,12 +81,35 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
 
     interface RetrofitHandle {
         @FormUrlEncoded
-        @POST()
-        Single<List<Alarm>> insert(Alarm alarm);
+        @POST("new")
+        Single<String> insert(
+                @Field("time") String time,
+                @Field("title") String title,
+                @Field("onoffswitch") boolean recurring,
+                @Field("monday_cb") boolean monday,
+                @Field("tuesday_cb") boolean tuesday,
+                @Field("wednesday_cb") boolean wednesday,
+                @Field("thursday_cb") boolean thursday,
+                @Field("friday_cb") boolean friday,
+                @Field("saturday_cb") boolean saturday,
+                @Field("sunday_cb") boolean sunday_cb
+        );
 
         @FormUrlEncoded
-        @PUT()
-        Single<List<Alarm>> update(Alarm alarm);
+        @POST("update")
+        Single<String> update(
+                @Field("aid") int id,
+                @Field("time") String time,
+                @Field("title") String title,
+                @Field("onoffswitch") boolean recurring,
+                @Field("monday_cb") boolean monday,
+                @Field("tuesday_cb") boolean tuesday,
+                @Field("wednesday_cb") boolean wednesday,
+                @Field("thursday_cb") boolean thursday,
+                @Field("friday_cb") boolean friday,
+                @Field("saturday_cb") boolean saturday,
+                @Field("sunday_cb") boolean sunday_cb
+        );
 
         @POST("cancel/{id}")
         Single<String> delete(@Path("id") long alarmId);
@@ -70,12 +119,13 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
     }
 
     @NotNull
-    static private final String BASE_URL = "https://remotealarmapi.herokuapp.com/";
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String BASE_URL = "https://remotealarmapi.herokuapp.com/";
     @Nullable
-    static private RetrofitHandle handle = null;
+    private RetrofitHandle handle = null;
 
     @NotNull
-    private static RetrofitHandle getHandle() {
+    private RetrofitHandle getHandle() {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS)

@@ -10,11 +10,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -99,7 +97,6 @@ public class AlarmService extends Service implements SensorEventListener {
             // moc giua 2 vung lift va sit la 2.5
             if (isCurrentLift) {
                 if (event.values[1] < 2.5f) {
-                    Log.d(TAG, "nam");
                     mediaPlayer.setVolume(1f,1f);
                     mediaPlayer.start();
                     isCurrentLift = false;
@@ -107,7 +104,6 @@ public class AlarmService extends Service implements SensorEventListener {
 
             } else {
                 if (event.values[1] > 2.5f) {
-                    Log.d(TAG, "lift");
                     mediaPlayer.setVolume(0.2f,0.2f);
                     mediaPlayer.start();
                     isCurrentLift = true;

@@ -2,9 +2,11 @@ package com.learntodroid.simplealarmclock.alarmslist;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +53,10 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             }
         });
 
+        alarmsListViewModel.getNoticeLiveData().observe(this, s -> {
+            Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show();
+        });
+
 //        FirebaseFirestore.getInstance().collection("alarms").addSnapshotListener(new EventListener<QuerySnapshot>() {
 //            @Override
 //            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -94,5 +100,11 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             alarm.schedule(requireContext());
         }
         alarmsListViewModel.update(alarm);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        alarmsListViewModel.getAlarm();
     }
 }
