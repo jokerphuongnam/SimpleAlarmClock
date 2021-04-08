@@ -40,7 +40,8 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
                 SystemClock.sleep(500);
                 subscribe.dispose();
             });
-            network.delete(alarm);
+            network.delete(alarm).subscribe((s, throwable) -> {});
+
         });
     }
 

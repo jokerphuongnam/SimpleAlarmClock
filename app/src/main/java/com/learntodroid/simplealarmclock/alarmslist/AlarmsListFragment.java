@@ -1,6 +1,7 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,9 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.learntodroid.simplealarmclock.R;
+import com.learntodroid.simplealarmclock.activities.MainActivity;
 import com.learntodroid.simplealarmclock.data.Alarm;
 
 import org.jetbrains.annotations.NotNull;
@@ -93,6 +96,13 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Log.i("ddd", "onViewCreated: "+  auth.getCurrentUser().getUid());
+    }
+
+    @Override
     public void onToggle(@NotNull Alarm alarm) {
         if (alarm.isStarted()) {
             alarm.cancelAlarm(requireContext());
@@ -105,6 +115,6 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     @Override
     public void onResume() {
         super.onResume();
-        alarmsListViewModel.getAlarm();
+       alarmsListViewModel.getAlarm();
     }
 }
