@@ -1,7 +1,10 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.learntodroid.simplealarmclock.R;
-import com.learntodroid.simplealarmclock.activities.MainActivity;
 import com.learntodroid.simplealarmclock.data.Alarm;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,6 +61,8 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmsListViewModel.getNoticeLiveData().observe(this, s -> {
             Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show();
         });
+
+        alarmsListViewModel.updateToken();
 
 //        FirebaseFirestore.getInstance().collection("alarms").addSnapshotListener(new EventListener<QuerySnapshot>() {
 //            @Override
@@ -111,10 +115,30 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         }
         alarmsListViewModel.update(alarm);
     }
-
+    UpdateAlarmReceiver receiver;
     @Override
     public void onResume() {
         super.onResume();
        alarmsListViewModel.getAlarm();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.khang.simplealarmclock");
+        receiver = new UpdateAlarmReceiver();
+       Objects.requireNonNull(getContext()).registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Objects.requireNonNull(getContext()).unregisterReceiver(receiver);
+        receiver = null;
+
+    }
+
+    public class UpdateAlarmReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            alarmsListViewModel.getAlarm();
+        }
     }
 }

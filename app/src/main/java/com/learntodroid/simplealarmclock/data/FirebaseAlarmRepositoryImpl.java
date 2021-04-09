@@ -80,4 +80,9 @@ public class FirebaseAlarmRepositoryImpl implements AlarmNetwork {
     public Single<List<Alarm>> getAlarms() {
         return alarmsLiveData;
     }
+
+    @Override
+    public void updateToken() {
+
+    }
 }

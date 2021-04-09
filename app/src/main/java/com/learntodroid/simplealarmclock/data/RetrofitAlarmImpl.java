@@ -1,8 +1,15 @@
 package com.learntodroid.simplealarmclock.data;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +20,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -25,6 +35,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+
+import static android.content.ContentValues.TAG;
 
 public class RetrofitAlarmImpl implements AlarmNetwork {
     @Nullable
@@ -91,7 +103,36 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
         return getHandle().getAlarms(FirebaseAuth.getInstance().getUid());
     }
 
+    @Override
+    public void updateToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        // gui token len db voi
+                        getHandle().updateToken(FirebaseAuth.getInstance().getUid(),token)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe((s, throwable) -> {});
+                        Log.i(TAG, token);
+                    }
+                });
+
+    }
+
     interface RetrofitHandle {
+        @FormUrlEncoded
+        @POST("updateToken")
+        Single<String> updateToken(
+                @Field("uid") String uid,
+                @Field("token") String token
+        );
+
         @FormUrlEncoded
         @POST("new")
         Single<String> insert(

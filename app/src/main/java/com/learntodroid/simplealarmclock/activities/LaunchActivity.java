@@ -5,14 +5,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.learntodroid.simplealarmclock.R;
 import com.rbddevs.splashy.Splashy;
 
@@ -20,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
+
+import static android.content.ContentValues.TAG;
 
 public class LaunchActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 199;
@@ -36,6 +43,7 @@ public class LaunchActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
         } else {
             List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.EmailBuilder().build(),

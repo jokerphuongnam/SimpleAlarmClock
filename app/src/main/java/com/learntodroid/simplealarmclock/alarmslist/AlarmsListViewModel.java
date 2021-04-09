@@ -48,7 +48,12 @@ public class AlarmsListViewModel extends AndroidViewModel {
                 .subscribe(alarmsLiveData::setValue, throwable -> {
                     throw throwable;
                 });
+
         composite.add(subscribeGetList);
+    }
+
+    public void updateToken() {
+        alarmRepository.updateToken();
     }
 
     public void update(Alarm alarm) {

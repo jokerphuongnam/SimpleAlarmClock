@@ -9,4 +9,6 @@ public interface AlarmNetwork {
     Single<String> update(Alarm alarm);
     Single<String> delete(Alarm alarm);
     Single<List<Alarm>> getAlarms();
+    void updateToken();
+
 }

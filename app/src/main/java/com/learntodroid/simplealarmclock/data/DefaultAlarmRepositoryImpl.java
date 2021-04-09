@@ -66,4 +66,9 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
             subscribe.dispose();
         });
     }
+
+    @Override
+    public void updateToken() {
+        network.updateToken();
+    }
 }

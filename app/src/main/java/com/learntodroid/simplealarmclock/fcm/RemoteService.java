@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -55,9 +56,14 @@ public class RemoteService extends FirebaseMessagingService {
                 hour = Integer.parseInt(datas.get("hour"));
                 minute = Integer.parseInt(datas.get("minute"));
                 scheduleAlarmOnline(id, hour,minute,title);
+
                 break;
             default:
         }
+        // gui broadcast cap nhat lai
+        Intent intent = new Intent();
+        intent.setAction("com.khang.simplealarmclock");
+        sendBroadcast(intent);
     }
 
 
@@ -102,5 +108,6 @@ public class RemoteService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
+        Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
     }
 }

@@ -9,4 +9,5 @@ public interface AlarmRepository {
     Single<String> update(Alarm alarm);
     Single<List<Alarm>> delete(Alarm alarm);
     Single<List<Alarm>> getAlarms();
+    void updateToken();
 }
