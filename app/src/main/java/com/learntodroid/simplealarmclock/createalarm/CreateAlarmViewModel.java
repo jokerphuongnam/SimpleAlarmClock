@@ -37,9 +37,7 @@ public class CreateAlarmViewModel extends AndroidViewModel {
         insertDisposable = alarmRepository.insert(alarm)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((s, throwable) -> {
-                    insertLiveData.setValue(s);
-                });
+                .subscribe((s, throwable) -> insertLiveData.setValue(s));
     }
 
     @NotNull
@@ -50,6 +48,9 @@ public class CreateAlarmViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        insertDisposable.dispose();
+        if(insertDisposable != null) {
+            insertDisposable.dispose();
+        }
+
     }
 }
