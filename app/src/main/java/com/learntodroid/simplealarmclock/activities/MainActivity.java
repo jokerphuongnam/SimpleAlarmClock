@@ -20,6 +20,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.learntodroid.simplealarmclock.R;
+import com.learntodroid.simplealarmclock.activities.userinfodialog.UserInfoFragment;
 import com.rbddevs.splashy.Splashy;
 
 import java.util.Arrays;
@@ -52,26 +53,22 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.app_menu);
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//
-//                if(item.getItemId()==R.id.item1)
-//                {
-//                    // do something
-//                }
-//                else if(item.getItemId()== R.id.filter)
-//                {
-//                    // do something
-//                }
-//                else{
-//                    // do something
-//                }
-//
-//                return false;
-//            }
-//        });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if(item.getItemId()==R.id.setting)
+                {
+                    new UserInfoFragment().show(getSupportFragmentManager(),"userInfo");
+                }
+                else{
+
+                }
+
+                return false;
+            }
+        });
         NavigationUI.setupWithNavController(
                 toolbar, navController, appBarConfiguration);
 
@@ -92,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.i("da","Dada");
         return super.onOptionsItemSelected(item);
     }
 }

@@ -43,10 +43,8 @@ public class LaunchActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
         } else {
             List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
                     new AuthUI.IdpConfig.GoogleBuilder().build());
 
 

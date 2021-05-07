@@ -108,6 +108,6 @@ public class RemoteService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
     }
 }
