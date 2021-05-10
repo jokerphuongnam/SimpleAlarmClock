@@ -1,37 +1,38 @@
 package com.learntodroid.simplealarmclock.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.activities.userinfodialog.UserInfoFragment;
+import com.learntodroid.simplealarmclock.data.Quote;
+import com.learntodroid.simplealarmclock.data.QuoteNetwork;
+import com.learntodroid.simplealarmclock.data.RetrofitQuoteNetworkImpl;
 import com.rbddevs.splashy.Splashy;
 
-import java.util.Arrays;
-import java.util.List;
-
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.functions.Consumer;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    @BindView(R.id.quote_tv)
+    TextView quoteTV;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,36 +43,30 @@ public class MainActivity extends AppCompatActivity {
                 .setTitleSize(30.0f)
                 .setTitleColor(R.color.colorAccent)
                 .setFullScreen(true)
-                .setAnimation(Splashy.Animation.SLIDE_IN_TOP_BOTTOM,500)
+                .setAnimation(Splashy.Animation.SLIDE_IN_TOP_BOTTOM, 500)
                 .setProgressColor(R.color.white)
                 .show();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.getQuoteLiveData().observe(this, observer->{
+            quoteTV.setText(observer);
+        });
         NavController navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph()).build();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.app_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.setting) {
+                new UserInfoFragment().show(getSupportFragmentManager(), "userInfo");
+            } else {
 
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                if(item.getItemId()==R.id.setting)
-                {
-                    new UserInfoFragment().show(getSupportFragmentManager(),"userInfo");
-                }
-                else{
-
-                }
-
-                return false;
             }
+            return false;
         });
-        NavigationUI.setupWithNavController(
-                toolbar, navController, appBarConfiguration);
-
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
     }
 
 

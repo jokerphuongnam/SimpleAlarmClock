@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.learntodroid.simplealarmclock.data.Alarm;
 import com.learntodroid.simplealarmclock.data.AlarmRepository;
 import com.learntodroid.simplealarmclock.data.DefaultAlarmRepositoryImpl;
-import com.learntodroid.simplealarmclock.data.RetrofitAlarmImpl;
 
 import org.jetbrains.annotations.NotNull;
 

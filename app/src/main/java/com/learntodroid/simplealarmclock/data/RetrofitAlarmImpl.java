@@ -40,13 +40,13 @@ import static android.content.ContentValues.TAG;
 
 public class RetrofitAlarmImpl implements AlarmNetwork {
     @Nullable
-    private static RetrofitAlarmImpl instance = null;
+    private static AlarmNetwork INSTANCE = null;
 
-    public static RetrofitAlarmImpl getInstance() {
-        if (instance == null) {
-            instance = new RetrofitAlarmImpl();
+    public static AlarmNetwork getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new RetrofitAlarmImpl();
         }
-        return instance;
+        return INSTANCE;
     }
 
     private final Locale locale;
@@ -181,20 +181,12 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
 
     @NotNull
     private RetrofitHandle getHandle() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(logging)
-                .build();
-
         if (handle == null) {
             handle = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                    .client(okHttpClient)
+                    .client(RetrofitSingleTone.getOkHttpClient())
                     .build()
                     .create(RetrofitHandle.class);
         }
