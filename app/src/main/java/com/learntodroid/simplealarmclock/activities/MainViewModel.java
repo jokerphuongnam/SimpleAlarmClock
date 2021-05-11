@@ -18,10 +18,10 @@ public class MainViewModel extends ViewModel {
     }
 
 
-    private QuoteNetwork quoteNetwork;
+    private final QuoteNetwork quoteNetwork;
     private Disposable disposable;
 
-    private SingleObserver<Quote> observer = new SingleObserver<Quote>() {
+    private final SingleObserver<Quote> observer = new SingleObserver<Quote>() {
         @Override
         public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
             disposable = d;

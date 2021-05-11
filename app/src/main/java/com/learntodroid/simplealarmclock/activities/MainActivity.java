@@ -3,12 +3,14 @@ package com.learntodroid.simplealarmclock.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,22 +19,17 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.activities.userinfodialog.UserInfoFragment;
-import com.learntodroid.simplealarmclock.data.Quote;
-import com.learntodroid.simplealarmclock.data.QuoteNetwork;
-import com.learntodroid.simplealarmclock.data.RetrofitQuoteNetworkImpl;
 import com.rbddevs.splashy.Splashy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.SingleObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.quote_tv)
     TextView quoteTV;
+    @BindView(R.id.quote_card)
+    CardView quoteCard;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.getQuoteLiveData().observe(this, observer->{
             quoteTV.setText(observer);
+            quoteCard.setVisibility(View.VISIBLE);
         });
         NavController navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
         AppBarConfiguration appBarConfiguration =
