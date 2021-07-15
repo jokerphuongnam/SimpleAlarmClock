@@ -26,9 +26,7 @@ public class RetrofitQuoteNetworkImpl implements QuoteNetwork {
 
     @Override
     public Single<Quote> getQuote() {
-        return getHandle().getQuote().map(quoteResponse -> {
-            return quoteResponse.body();
-        });
+        return getHandle().getQuote().map(Response::body);
     }
 
     interface RetrofitHandel{
@@ -38,7 +36,7 @@ public class RetrofitQuoteNetworkImpl implements QuoteNetwork {
 
     @NotNull
     @SuppressWarnings("FieldCanBeLocal")
-    private final String BASE_URL = "http://lamapi.somee.com/";
+    private final String BASE_URL = "https://lamapi.somee.com/";
 
     private RetrofitHandel handle;
 

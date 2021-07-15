@@ -80,7 +80,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         return false;
     }
 
-    private void startAlarmService(Context context, Intent intent) {
+    private void  startAlarmService(Context context, Intent intent) {
         Intent intentService = new Intent(context, AlarmService.class);
         intentService.putExtra("alarmId", intent.getIntExtra("alarmId",0));
         intentService.putExtra(TITLE, intent.getStringExtra(TITLE));
@@ -99,7 +99,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         } else {
             context.startService(intentService);
         }
-
     }
 
 
