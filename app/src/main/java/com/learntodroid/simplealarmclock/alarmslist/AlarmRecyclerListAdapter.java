@@ -18,12 +18,13 @@ import java.util.List;
 public class AlarmRecyclerListAdapter extends ListAdapter<Alarm, AlarmViewHolder> {
 
     private final OnToggleAlarmListener listener;
+    private final ItemTouchListener deleteListener;
 
-
-    public AlarmRecyclerListAdapter(OnToggleAlarmListener listener) {
+    public AlarmRecyclerListAdapter(OnToggleAlarmListener listener, ItemTouchListener deleteListener) {
         super(new AlarmDiffCallback());
     //    this.alarms = new ArrayList<Alarm>();
         this.listener = listener;
+        this.deleteListener =deleteListener;
     }
 
     public Alarm getAlarm(int position) {
@@ -34,7 +35,7 @@ public class AlarmRecyclerListAdapter extends ListAdapter<Alarm, AlarmViewHolder
     @Override
     public AlarmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alarm, parent, false);
-        return new AlarmViewHolder(itemView, listener);
+        return new AlarmViewHolder(itemView, listener, deleteListener);
     }
 
     @Override

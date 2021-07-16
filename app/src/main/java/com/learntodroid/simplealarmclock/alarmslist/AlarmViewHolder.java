@@ -2,8 +2,8 @@ package com.learntodroid.simplealarmclock.alarmslist;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,14 +24,14 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
     private final TextView alarmRecurringDays;
     private final TextView alarmTitle;
     private final CardView container;
+    private final ItemTouchListener deleteListener;
 
     SwitchMaterial alarmStarted;
 
     private final OnToggleAlarmListener listener;
 
-    public AlarmViewHolder(@NonNull View itemView, OnToggleAlarmListener listener) {
+    public AlarmViewHolder(@NonNull View itemView, OnToggleAlarmListener listener,ItemTouchListener deleteListener) {
         super(itemView);
-
         alarmTime = itemView.findViewById(R.id.item_alarm_time);
         alarmStarted = itemView.findViewById(R.id.item_alarm_started);
         alarmRecurring = itemView.findViewById(R.id.item_alarm_recurring);
@@ -39,6 +39,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         alarmTitle = itemView.findViewById(R.id.item_alarm_title);
         container = itemView.findViewById(R.id.container);
         this.listener = listener;
+        this.deleteListener = deleteListener;
     }
 
     public void bind(@NotNull Alarm alarm) {
@@ -66,7 +67,25 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
             listener.onToggle(alarm);
         });
 
-        container.setOnClickListener((view)->{
+        container.setOnLongClickListener((view) -> {
+            PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+            popupMenu.inflate(R.menu.pop_up_option_menu);
+            popupMenu.setOnMenuItemClickListener((menuItem) -> {
+                switch (menuItem.getItemId()) {
+                    case R.id.delete:
+                        deleteListener.swipe(getAdapterPosition(), 0 );
+                        break;
+                    case R.id.edit:
+                        listener.itemClick(view, alarm);
+                        break;
+                }
+                return true;
+            });
+            popupMenu.show();
+            return true;
+        });
+
+        container.setOnClickListener((view) -> {
             listener.itemClick(view, alarm);
         });
     }

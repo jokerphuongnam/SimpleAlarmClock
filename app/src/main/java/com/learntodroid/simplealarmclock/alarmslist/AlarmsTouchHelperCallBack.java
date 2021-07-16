@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AlarmsTouchHelperCallBack extends ItemTouchHelper.SimpleCallback {
-    private ItemTouchListener mListener;
+    private final ItemTouchListener mListener;
 
 
     public AlarmsTouchHelperCallBack(ItemTouchListener listener) {

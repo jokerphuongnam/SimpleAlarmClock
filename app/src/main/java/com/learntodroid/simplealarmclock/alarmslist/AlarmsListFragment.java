@@ -1,6 +1,7 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @SuppressLint("NonConstantResourceId")
-public class AlarmsListFragment extends Fragment implements OnToggleAlarmListener {
+public class AlarmsListFragment extends Fragment implements OnToggleAlarmListener, ItemTouchListener {
     private AlarmRecyclerListAdapter alarmRecyclerListAdapter;
     private AlarmsListViewModel alarmsListViewModel;
     @BindView(R.id.fragment_listalarms_recylerView)
@@ -50,7 +51,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setTmp();
-        alarmRecyclerListAdapter = new AlarmRecyclerListAdapter(this);
+        alarmRecyclerListAdapter = new AlarmRecyclerListAdapter(this, this);
         alarmsListViewModel = ViewModelProviders.of(this).get(AlarmsListViewModel.class);
         alarmsListViewModel.getAlarmsLiveData().observe(this, alarms -> {
             if (alarms != null) {
@@ -90,20 +91,36 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmsRecyclerView.setAdapter(alarmRecyclerListAdapter);
         alarmsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         addAlarm.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment, null));
+        new ItemTouchHelper(new AlarmsTouchHelperCallBack(this)).attachToRecyclerView(alarmsRecyclerView);
+        return view;
+    }
 
-        new ItemTouchHelper(new AlarmsTouchHelperCallBack((position, direction) -> {
+    @Override
+    public void swipe(int position, int direction) {
+        showNotify(position);
+    }
+
+    public void showNotify(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Delete alarm " + alarmRecyclerListAdapter.getAlarm(position).getTitle() + "?");
+        builder.setPositiveButton("OK", (dialogInterface, i) -> {
             Alarm alarm = alarmRecyclerListAdapter.getAlarm(position);
             alarmsListViewModel.delete(alarm);
-        })).attachToRecyclerView(alarmsRecyclerView);
-
-        return view;
+            alarmRecyclerListAdapter.notifyDataSetChanged();
+            dialogInterface.dismiss();
+        });
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            alarmRecyclerListAdapter.notifyDataSetChanged();
+        });
+        AlertDialog alertDialog = builder.create(); //create
+        alertDialog.show(); //Show it.
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Log.i("ddd", "onViewCreated: "+  auth.getCurrentUser().getUid());
+        Log.i("ddd", "onViewCreated: " + auth.getCurrentUser().getUid());
     }
 
     @Override
