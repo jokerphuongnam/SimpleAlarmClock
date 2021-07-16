@@ -15,6 +15,7 @@ import androidx.room.PrimaryKey;
 import com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver;
 import com.learntodroid.simplealarmclock.createalarm.DayUtil;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.FRIDAY;
@@ -28,7 +29,7 @@ import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcast
 import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.WEDNESDAY;
 
 @Entity(tableName = "alarm_table")
-public class Alarm {
+public class Alarm implements Serializable {
     @PrimaryKey
     @NonNull
     private int alarmId;

@@ -69,7 +69,7 @@ public class AlarmsListViewModel extends AndroidViewModel {
         composite.add(updateDispose);
     }
 
-    public void delete(Alarm alarm) {
+    public void delete(@NotNull Alarm alarm) {
         alarm.cancelAlarm(getApplication());
         if (subscribeDelete != null) {
             subscribeDelete.dispose();

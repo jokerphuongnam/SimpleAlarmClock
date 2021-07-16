@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/webp_net_resizeimage"
-    android:elevation="0dp">
+    android:elevation="0dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/fragment_createalarm_scheduleAlarmHeading"
@@ -17,89 +18,69 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorAccent"
         android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="550dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_createalarm_scheduleAlarm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/fragment_createalarm_timePickerLayout"
+        <TimePicker
+            android:id="@+id/fragment_createalarm_timePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="#FFFFFF"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_weight="0.6"
+            android:timePickerMode="clock" />
+    </LinearLayout>
 
-            <TimePicker
-                android:id="@+id/fragment_createalarm_timePicker"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:timePickerMode="clock" />
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fragment_createalarm_title_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/design_default_color_primary"
+        app:cardCornerRadius="12dp">
 
+        <EditText
+            android:id="@+id/fragment_createalarm_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-        </LinearLayout>
+            android:layout_margin="8dp"
+            android:drawableLeft="@drawable/ic_edi"
+            android:hint="Alarm Title"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/fragment_createalarm_title_card"
-            android:layout_width="372dp"
-            android:layout_height="55dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/colorAccent"
-            android:backgroundTint="@color/design_default_color_primary"
-            app:cardCornerRadius="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_createalarm_timePickerLayout">
+    </com.google.android.material.card.MaterialCardView>
 
-            <EditText
-                android:id="@+id/fragment_createalarm_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/fragment_createalarm_recurring"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:checked="false"
+        android:text="Recurring Alarm" />
 
-                android:layout_marginLeft="8dp"
-                android:drawableLeft="@drawable/ic_edi"
-                android:hint="Alarm Title"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/fragment_createalarm_recurring"
-            android:layout_width="357dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:checked="false"
-            android:text="Recurring Alarm"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_createalarm_title_card" />
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/fragment_createalarm_recurring_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fillViewport="true"
+        tools:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/fragment_createalarm_recurring_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_createalarm_recurring">
+            android:orientation="horizontal">
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/fragment_createalarm_checkMon"
@@ -144,23 +125,17 @@
                 android:text="Sun" />
 
         </LinearLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.core.widget.NestedScrollView>
 
     <Button
         android:id="@+id/fragment_createalarm_scheduleAlarm"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="32dp"
-        android:text="Schedule Alarm"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Schedule Alarm" />
+</LinearLayout>
 

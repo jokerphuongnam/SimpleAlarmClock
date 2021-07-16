@@ -89,7 +89,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         alarmsRecyclerView.setAdapter(alarmRecyclerListAdapter);
         alarmsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        addAlarm.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment));
+        addAlarm.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment, null));
 
         new ItemTouchHelper(new AlarmsTouchHelperCallBack((position, direction) -> {
             Alarm alarm = alarmRecyclerListAdapter.getAlarm(position);
@@ -115,6 +115,14 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         }
         alarmsListViewModel.update(alarm);
     }
+
+    @Override
+    public void itemClick(View v, Alarm alarm) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("alarm", alarm);
+        Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment, bundle);
+    }
+
     UpdateAlarmReceiver receiver;
     @Override
     public void onResume() {
@@ -131,7 +139,6 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         super.onPause();
         Objects.requireNonNull(getContext()).unregisterReceiver(receiver);
         receiver = null;
-
     }
 
     public class UpdateAlarmReceiver extends BroadcastReceiver {

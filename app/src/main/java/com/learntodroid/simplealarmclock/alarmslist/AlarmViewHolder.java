@@ -1,11 +1,13 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -21,6 +23,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
     private final ImageView alarmRecurring;
     private final TextView alarmRecurringDays;
     private final TextView alarmTitle;
+    private final CardView container;
 
     SwitchMaterial alarmStarted;
 
@@ -34,7 +37,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         alarmRecurring = itemView.findViewById(R.id.item_alarm_recurring);
         alarmRecurringDays = itemView.findViewById(R.id.item_alarm_recurringDays);
         alarmTitle = itemView.findViewById(R.id.item_alarm_title);
-
+        container = itemView.findViewById(R.id.container);
         this.listener = listener;
     }
 
@@ -61,6 +64,10 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         alarmStarted.setOnCheckedChangeListener((buttonView, isChecked) -> {
             alarm.setRecurring(isChecked);
             listener.onToggle(alarm);
+        });
+
+        container.setOnClickListener((view)->{
+            listener.itemClick(view, alarm);
         });
     }
 }
