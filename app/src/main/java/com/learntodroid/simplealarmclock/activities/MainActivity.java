@@ -1,16 +1,14 @@
 package com.learntodroid.simplealarmclock.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,16 +19,10 @@ import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.activities.userinfodialog.UserInfoFragment;
 import com.rbddevs.splashy.Splashy;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
+@SuppressLint("NonConstantResourceId")
 public class MainActivity extends AppCompatActivity {
-
-    @BindView(R.id.quote_tv)
-    TextView quoteTV;
-    @BindView(R.id.quote_card)
-    CardView quoteCard;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new Splashy(this)  // For JAVA : new Splashy(this)
@@ -46,11 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        viewModel.getQuoteLiveData().observe(this, observer->{
-            quoteTV.setText(observer);
-            quoteCard.setVisibility(View.VISIBLE);
-        });
         NavController navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -59,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.setting) {
                 new UserInfoFragment().show(getSupportFragmentManager(), "userInfo");
-            } else {
-
             }
             return false;
         });

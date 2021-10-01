@@ -1,5 +1,15 @@
 package com.learntodroid.simplealarmclock.data;
 
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.FRIDAY;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.MONDAY;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.RECURRING;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.SATURDAY;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.SUNDAY;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.THURSDAY;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.TITLE;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.TUESDAY;
+import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.WEDNESDAY;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,21 +27,11 @@ import com.learntodroid.simplealarmclock.createalarm.DayUtil;
 
 import java.io.Serializable;
 import java.util.Calendar;
-
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.FRIDAY;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.MONDAY;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.RECURRING;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.SATURDAY;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.SUNDAY;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.THURSDAY;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.TITLE;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.TUESDAY;
-import static com.learntodroid.simplealarmclock.broadcastreceiver.AlarmBroadcastReceiver.WEDNESDAY;
+import java.util.Locale;
 
 @Entity(tableName = "alarm_table")
 public class Alarm implements Serializable {
     @PrimaryKey
-    @NonNull
     private int alarmId;
 
     private int hour;
@@ -199,7 +199,7 @@ public class Alarm implements Serializable {
         if (!recurring) {
             String toastText = null;
             try {
-                toastText = String.format("One Time Alarm %s scheduled for %s at %02d:%02d", title, DayUtil.toDay(calendar.get(Calendar.DAY_OF_WEEK)), hour, minute, alarmId);
+                toastText = String.format(Locale.getDefault(), "One Time Alarm %s scheduled for %s at %02d:%02d", title, DayUtil.toDay(calendar.get(Calendar.DAY_OF_WEEK)), hour, minute, alarmId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -211,7 +211,7 @@ public class Alarm implements Serializable {
                     alarmPendingIntent
             );
         } else {
-            String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", title, getRecurringDaysText(), hour, minute, alarmId);
+            String toastText = String.format(Locale.getDefault(), "Recurring Alarm %s scheduled for %s at %02d:%02d", title, getRecurringDaysText(), hour, minute, alarmId);
        //     Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
             final long RUN_DAILY = 24 * 60 * 60 * 1000;
@@ -226,15 +226,15 @@ public class Alarm implements Serializable {
         this.started = true;
     }
 
-    public void cancelAlarm(Context context) {
+    public void cancelAlarm(@NonNull Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
         alarmManager.cancel(alarmPendingIntent);
         this.started = false;
 
-        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId);
-     //   Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+        String toastText = String.format(Locale.getDefault(), "Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId);
+        //   Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
         Log.i("cancel", toastText);
     }
 

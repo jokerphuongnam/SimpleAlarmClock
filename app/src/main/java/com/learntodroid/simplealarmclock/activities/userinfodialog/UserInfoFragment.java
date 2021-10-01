@@ -53,7 +53,9 @@ public class UserInfoFragment extends DialogFragment {
         Uri photoUrl = currentUser.getPhotoUrl();
         ((TextView) view.findViewById(R.id.userEmail)).setText(email);
         ((TextView) view.findViewById(R.id.username)).setText(displayName);
-        Picasso.get().load(photoUrl.toString()).transform(new CircleTransform()).into(((ImageView) view.findViewById(R.id.userAvartar)));
+        if (photoUrl != null) {
+            Picasso.get().load(photoUrl.toString()).transform(new CircleTransform()).into(((ImageView) view.findViewById(R.id.userAvartar)));
+        }
         view.findViewById(R.id.signOutBtn).setOnClickListener(view1 -> {
             AuthUI.getInstance()
                     .signOut(requireActivity())
@@ -62,9 +64,6 @@ public class UserInfoFragment extends DialogFragment {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     });
-
         });
-
-
     }
 }

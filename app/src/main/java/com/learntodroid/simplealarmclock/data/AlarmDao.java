@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 @Dao
@@ -31,5 +32,5 @@ public interface AlarmDao extends AlarmLocal {
 
     @Override
     @Query("SELECT * FROM alarm_table ORDER BY created ASC")
-    Single<List<Alarm>> getAlarms();
+    Observable<List<Alarm>> getAlarms();
 }

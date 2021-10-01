@@ -1,7 +1,6 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -23,7 +22,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AlarmsListViewModel extends AndroidViewModel {
     private final AlarmRepository alarmRepository;
-    public final MutableLiveData<List<Alarm>> alarmsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Alarm>> alarmsLiveData = new MutableLiveData<>();
     private Disposable subscribeGetList = null;
     private Disposable subscribeDelete = null;
     private final CompositeDisposable composite = new CompositeDisposable();
@@ -34,7 +33,6 @@ public class AlarmsListViewModel extends AndroidViewModel {
 
     public AlarmsListViewModel(@NonNull Application application) {
         super(application);
-//        alarmRepository = new FirebaseAlarmRepositoryImpl(application);
         alarmRepository = new DefaultAlarmRepositoryImpl(application);
     }
 
@@ -46,6 +44,7 @@ public class AlarmsListViewModel extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(alarmsLiveData::setValue, throwable -> {
+                    throwable.printStackTrace();
                     throw throwable;
                 });
 
@@ -63,9 +62,10 @@ public class AlarmsListViewModel extends AndroidViewModel {
         updateDispose = alarmRepository.update(alarm)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((s, throwable) -> {
-            noticeLiveData.setValue(s);
-        });
+                .subscribe(noticeLiveData::setValue, throwable -> {
+                    throwable.printStackTrace();
+                    throw throwable;
+                });
         composite.add(updateDispose);
     }
 
@@ -77,7 +77,8 @@ public class AlarmsListViewModel extends AndroidViewModel {
         subscribeDelete = alarmRepository.delete(alarm)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(alarmsLiveData::setValue, throwable -> {
+                .subscribe(noticeLiveData::setValue, throwable -> {
+                    throwable.printStackTrace();
                     throw throwable;
                 });
         composite.add(subscribeDelete);

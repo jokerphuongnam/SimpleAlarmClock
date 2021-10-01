@@ -2,6 +2,7 @@ package com.learntodroid.simplealarmclock.data;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface AlarmLocal {
@@ -13,5 +14,5 @@ public interface AlarmLocal {
 
     void deleteAll();
 
-    Single<List<Alarm>> getAlarms();
+    Observable<List<Alarm>> getAlarms();
 }

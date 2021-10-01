@@ -5,11 +5,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -24,13 +22,9 @@ import java.util.Map;
 * */
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class RemoteService extends FirebaseMessagingService {
-    public RemoteService() {
-    }
-
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
         Map<String, String> datas = remoteMessage.getData();
         String type = datas.get("type"); // message co type
         int id = Integer.parseInt(datas.get("alarmId")); // id
@@ -56,7 +50,6 @@ public class RemoteService extends FirebaseMessagingService {
                 hour = Integer.parseInt(datas.get("hour"));
                 minute = Integer.parseInt(datas.get("minute"));
                 scheduleAlarmOnline(id, hour,minute,title);
-
                 break;
             default:
         }
@@ -66,7 +59,6 @@ public class RemoteService extends FirebaseMessagingService {
         sendBroadcast(intent);
     }
 
-
     void cancelAlarmOnline(int alarmId) {
         Context context = getApplicationContext();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -74,13 +66,11 @@ public class RemoteService extends FirebaseMessagingService {
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
         alarmManager.cancel(alarmPendingIntent);
        // this.started = false; web da update vao firestore
-
         Log.i("cancel", "cancel alarm");
     }
 
     void scheduleAlarmOnline(int alarmId,int hour, int minute, String title) {
        // int alarmId = new Random().nextInt(Integer.MAX_VALUE);
-
         Alarm alarm = new Alarm(
                 alarmId,
                 hour,
@@ -97,16 +87,15 @@ public class RemoteService extends FirebaseMessagingService {
                 false,
                 false
         );
-
         // web da insert vao firestore
-
 
         // schedule bao thuc
         alarm.schedule(getApplicationContext());
+        Log.i("insert", "insert alarm");
     }
 
     @Override
-    public void onNewToken(String s) {
+    public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
 //        Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
     }

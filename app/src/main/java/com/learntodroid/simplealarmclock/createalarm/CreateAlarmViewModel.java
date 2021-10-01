@@ -1,6 +1,7 @@
 package com.learntodroid.simplealarmclock.createalarm;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -24,12 +25,11 @@ public class CreateAlarmViewModel extends AndroidViewModel {
 
     public CreateAlarmViewModel(@NonNull Application application) {
         super(application);
-//        alarmRepository = new FirebaseAlarmRepositoryImpl(application);
         alarmRepository = new DefaultAlarmRepositoryImpl(application);
     }
 
     private Disposable insertDisposable;
-    private MutableLiveData<String> noticeLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> noticeLiveData = new MutableLiveData<>();
 
     public void insert(Alarm alarm) {
         if (insertDisposable != null) {
