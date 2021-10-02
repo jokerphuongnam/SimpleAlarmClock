@@ -1,23 +1,16 @@
 package com.learntodroid.simplealarmclock.data;
 
-import static android.content.ContentValues.TAG;
-
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -122,25 +115,25 @@ public class FirebaseAlarmImpl implements AlarmNetwork {
 
     @Override
     public void updateToken() {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> new Thread(() -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get new FCM registration token
-                    String token = task.getResult();
-                    // gui token len db voi
-                    String uid = auth.getUid();
-                    if (uid != null) {
-                        Map<String, String> tokens = new HashMap<>();
-                        tokens.put("deviceToken", token);
-                        fb
-                                .collection("user")
-                                .document(uid)
-                                .set(tokens);
-                    }
-                    Log.i(TAG, token != null ? token : "");
-                }).start());
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(task -> new Thread(() -> {
+//                    if (!task.isSuccessful()) {
+//                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//                        return;
+//                    }
+//                    // Get new FCM registration token
+//                    String token = task.getResult();
+//                    // gui token len db voi
+//                    String uid = auth.getUid();
+//                    if (uid != null) {
+//                        Map<String, String> tokens = new HashMap<>();
+//                        tokens.put("deviceToken", token);
+//                        fb
+//                                .collection("user")
+//                                .document(uid)
+//                                .set(tokens);
+//                    }
+//                    Log.i(TAG, token != null ? token : "");
+//                }).start());
     }
 }

@@ -31,13 +31,11 @@ import com.learntodroid.simplealarmclock.data.Alarm;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-@SuppressLint("NonConstantResourceId")
+@SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
 public class AlarmsListFragment extends Fragment implements OnToggleAlarmListener, ItemTouchListener {
     private AlarmRecyclerListAdapter alarmRecyclerListAdapter;
     private AlarmsListViewModel alarmsListViewModel;
@@ -46,7 +44,6 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     @BindView(R.id.extended_fab)
     ExtendedFloatingActionButton addAlarm;
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +59,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             alarmRecyclerListAdapter.notifyDataSetChanged();
         });
 
-        alarmsListViewModel.getNoticeLiveData().observe(this, s -> {
-            Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show();
-        });
+        alarmsListViewModel.getNoticeLiveData().observe(this, s -> Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show());
         alarmsListViewModel.updateToken();
     }
 
@@ -86,14 +81,12 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         showNotify(position);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void showNotify(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("Delete alarm " + alarmRecyclerListAdapter.getAlarm(position).getTitle() + "?");
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
             Alarm alarm = alarmRecyclerListAdapter.getAlarm(position);
             alarmsListViewModel.delete(alarm);
-            dialogInterface.dismiss();
         });
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> alarmRecyclerListAdapter.notifyDataSetChanged());
         AlertDialog alertDialog = builder.create(); //create
@@ -104,7 +97,9 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Log.i("ddd", "onViewCreated: " + auth.getCurrentUser().getUid());
+        if (auth.getCurrentUser() != null) {
+            Log.i("ddd", "onViewCreated: " + auth.getCurrentUser().getUid());
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
-import android.util.Log;
+import static java.lang.String.format;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -16,7 +17,7 @@ import com.learntodroid.simplealarmclock.data.Alarm;
 
 import org.jetbrains.annotations.NotNull;
 
-import static java.lang.String.format;
+import java.util.Locale;
 
 public class AlarmViewHolder extends RecyclerView.ViewHolder {
     private final TextView alarmTime;
@@ -43,7 +44,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(@NotNull Alarm alarm) {
-        String alarmText = format("%02d:%02d", alarm.getHour(), alarm.getMinute());
+        String alarmText = format(Locale.getDefault(),"%02d:%02d", alarm.getHour(), alarm.getMinute());
 
         alarmTime.setText(alarmText);
         alarmStarted.setChecked(alarm.isStarted());
@@ -57,9 +58,9 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (alarm.getTitle() != null && alarm.getTitle().length() != 0) {
-            alarmTitle.setText(format("%s | %d | %d", alarm.getTitle(), alarm.getAlarmId(), alarm.getCreated()));
+            alarmTitle.setText(format(Locale.getDefault(),"%s | %d | %d", alarm.getTitle(), alarm.getAlarmId(), alarm.getCreated()));
         } else {
-            alarmTitle.setText(format("%s | %d | %d", "Alarm", alarm.getAlarmId(), alarm.getCreated()));
+            alarmTitle.setText(format(Locale.getDefault(),"%s | %d | %d", "Alarm", alarm.getAlarmId(), alarm.getCreated()));
         }
 
         alarmStarted.setOnCheckedChangeListener((buttonView, isChecked) -> {
