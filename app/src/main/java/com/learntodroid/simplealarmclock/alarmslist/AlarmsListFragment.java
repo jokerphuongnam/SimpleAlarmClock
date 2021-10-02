@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +44,8 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     RecyclerView alarmsRecyclerView;
     @BindView(R.id.extended_fab)
     ExtendedFloatingActionButton addAlarm;
+    @BindView(R.id.fragment_listalarms_refresh)
+    SwipeRefreshLayout refresh;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +61,6 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             }
             alarmRecyclerListAdapter.notifyDataSetChanged();
         });
-
         alarmsListViewModel.getNoticeLiveData().observe(this, s -> Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show());
         alarmsListViewModel.updateToken();
     }
@@ -73,6 +75,9 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         addAlarm.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment, null));
         new ItemTouchHelper(new AlarmsTouchHelperCallBack(this)).attachToRecyclerView(alarmsRecyclerView);
+        refresh.setOnRefreshListener(() -> {
+            alarmsListViewModel.refresh();
+        });
         return view;
     }
 

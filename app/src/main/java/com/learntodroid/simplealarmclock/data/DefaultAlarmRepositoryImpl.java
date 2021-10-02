@@ -46,4 +46,9 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
     public void updateToken() {
         network.updateToken();
     }
+
+    @Override
+    public void refresh() {
+        network.refresh();
+    }
 }

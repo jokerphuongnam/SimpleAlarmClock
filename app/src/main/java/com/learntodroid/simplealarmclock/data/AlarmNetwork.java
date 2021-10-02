@@ -11,4 +11,5 @@ public interface AlarmNetwork {
     Single<String> delete(Alarm alarm);
     Observable<List<Alarm>> getAlarms();
     void updateToken();
+    void refresh();
 }

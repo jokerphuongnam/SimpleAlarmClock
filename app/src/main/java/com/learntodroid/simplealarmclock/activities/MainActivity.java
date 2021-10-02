@@ -2,14 +2,17 @@ package com.learntodroid.simplealarmclock.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.activities.userinfodialog.UserInfoFragment;
+import com.learntodroid.simplealarmclock.alarmslist.AlarmsListFragment;
 import com.rbddevs.splashy.Splashy;
 
 import butterknife.ButterKnife;
@@ -52,12 +56,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         return super.onSupportNavigateUp();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,5 +70,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Nullable
+    private Fragment isAlarmsFragment() {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.activity_main_nav_host_fragment);
+        return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getFragments().get(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isAlarmsFragment() instanceof AlarmsListFragment) {
+            if (doubleBackToExitPressedOnce) {
+                finishAffinity();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.message_click_back, Toast.LENGTH_SHORT).show();
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -95,6 +95,10 @@ public class AlarmsListViewModel extends AndroidViewModel {
         return noticeLiveData;
     }
 
+    public void refresh(){
+        alarmRepository.refresh();
+    }
+
     @Override
     protected void onCleared() {
         super.onCleared();

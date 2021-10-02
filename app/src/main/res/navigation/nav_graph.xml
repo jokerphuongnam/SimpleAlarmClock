@@ -16,12 +16,12 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" >
+            app:popExitAnim="@anim/slide_out_right">
 
             <argument
                 android:name="alarm"
-                app:nullable="true"
-                app:argType="com.learntodroid.simplealarmclock.data.Alarm"/>
+                app:argType="com.learntodroid.simplealarmclock.data.Alarm"
+                app:nullable="true" />
         </action>
     </fragment>
     <fragment
@@ -33,6 +33,7 @@
             android:id="@+id/action_createAlarmFragment_to_alarmsListFragment"
             app:destination="@id/alarmsListFragment"
             app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right" />
+            app:exitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/alarmsListFragment" />
     </fragment>
 </navigation>

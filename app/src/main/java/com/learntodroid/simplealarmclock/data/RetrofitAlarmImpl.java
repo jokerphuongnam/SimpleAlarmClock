@@ -183,4 +183,9 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
         }
         return handle;
     }
+
+    @Override
+    public void refresh() {
+
+    }
 }

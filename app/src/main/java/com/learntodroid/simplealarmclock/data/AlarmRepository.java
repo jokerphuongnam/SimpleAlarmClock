@@ -11,4 +11,5 @@ public interface AlarmRepository {
     Single<String> delete(Alarm alarm);
     Observable<List<Alarm>> getAlarms();
     void updateToken();
+    void refresh();
 }

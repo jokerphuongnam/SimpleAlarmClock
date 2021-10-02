@@ -70,8 +70,10 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         }
 
         alarmStarted.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            alarm.setRecurring(isChecked);
-            listener.onToggle(alarm);
+            if (buttonView.isPressed()){
+                alarm.setRecurring(isChecked);
+                listener.onToggle(alarm);
+            }
         });
 
         container.setOnLongClickListener((view) -> {
