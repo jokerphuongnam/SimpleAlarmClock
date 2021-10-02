@@ -107,7 +107,6 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             Alarm alarm = alarmRecyclerListAdapter.getAlarm(position);
             alarmsListViewModel.delete(alarm);
             alarmRecyclerListAdapter.notifyDataSetChanged();
-            dialogInterface.dismiss();
         });
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
             alarmRecyclerListAdapter.notifyDataSetChanged();
