@@ -2,6 +2,8 @@ package com.learntodroid.simplealarmclock.alarmslist;
 
 import static java.lang.String.format;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -19,26 +21,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class AlarmViewHolder extends RecyclerView.ViewHolder {
-    private final TextView alarmTime;
-    private final ImageView alarmRecurring;
-    private final TextView alarmRecurringDays;
-    private final TextView alarmTitle;
-    private final CardView container;
-    private final ItemTouchListener deleteListener;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+@SuppressLint("NonConstantResourceId")
+public class AlarmViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.item_alarm_time)
+    TextView alarmTime;
+    @BindView(R.id.item_alarm_recurring)
+    ImageView alarmRecurring;
+    @BindView(R.id.item_alarm_recurringDays)
+    TextView alarmRecurringDays;
+    @BindView(R.id.item_alarm_title)
+    TextView alarmTitle;
+    @BindView(R.id.container)
+    CardView container;
+    @BindView(R.id.item_alarm_started)
     SwitchMaterial alarmStarted;
 
     private final OnToggleAlarmListener listener;
+    private final ItemTouchListener deleteListener;
 
     public AlarmViewHolder(@NonNull View itemView, OnToggleAlarmListener listener,ItemTouchListener deleteListener) {
         super(itemView);
-        alarmTime = itemView.findViewById(R.id.item_alarm_time);
-        alarmStarted = itemView.findViewById(R.id.item_alarm_started);
-        alarmRecurring = itemView.findViewById(R.id.item_alarm_recurring);
-        alarmRecurringDays = itemView.findViewById(R.id.item_alarm_recurringDays);
-        alarmTitle = itemView.findViewById(R.id.item_alarm_title);
-        container = itemView.findViewById(R.id.container);
+        ButterKnife.bind(this, itemView);
         this.listener = listener;
         this.deleteListener = deleteListener;
     }
@@ -54,7 +60,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
             alarmRecurringDays.setText(alarm.getRecurringDaysText());
         } else {
             alarmRecurring.setImageResource(R.drawable.ic_looks_one_black_24dp);
-            alarmRecurringDays.setText("Once Off");
+            alarmRecurringDays.setText(R.string.one_off);
         }
 
         if (alarm.getTitle() != null && alarm.getTitle().length() != 0) {
@@ -86,8 +92,6 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
             return true;
         });
 
-        container.setOnClickListener((view) -> {
-            listener.itemClick(view, alarm);
-        });
+        container.setOnClickListener((view) -> listener.itemClick(view, alarm));
     }
 }
