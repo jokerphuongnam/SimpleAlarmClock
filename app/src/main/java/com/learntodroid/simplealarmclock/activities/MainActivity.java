@@ -21,7 +21,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.activities.userinfodialog.UserInfoFragment;
 import com.learntodroid.simplealarmclock.alarmslist.AlarmsListFragment;
-import com.rbddevs.splashy.Splashy;
 
 import butterknife.ButterKnife;
 
@@ -29,16 +28,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        new Splashy(this)  // For JAVA : new Splashy(this)
-                .setLogo(R.drawable.clouds2)
-                .setDuration(1000)
-                .setTitle("Remote Alarm")
-                .setTitleSize(30.0f)
-                .setTitleColor(R.color.colorAccent)
-                .setFullScreen(true)
-                .setAnimation(Splashy.Animation.SLIDE_IN_TOP_BOTTOM, 500)
-                .setProgressColor(R.color.white)
-                .show();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

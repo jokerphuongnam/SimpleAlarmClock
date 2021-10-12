@@ -2,6 +2,7 @@ package com.learntodroid.simplealarmclock.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -11,19 +12,40 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.learntodroid.simplealarmclock.R;
+import com.learntodroid.simplealarmclock.application.App;
+import com.rbddevs.splashy.Splashy;
 
 import java.util.Collections;
 import java.util.List;
 
 public class LaunchActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 199;
+    private static final long DURATION = 1000;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        new Handler().postDelayed(() -> {
-//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//        }, 1000);
-        super.onCreate(savedInstanceState);
+        if (App.isFirstTime()) {
+            new Splashy(this)  // For JAVA : new Splashy(this)
+                    .setLogo(R.drawable.clouds2)
+                    .setDuration(DURATION)
+                    .setTitle("Remote Alarm")
+                    .setTitleSize(30.0f)
+                    .setTitleColor(R.color.colorAccent)
+                    .setFullScreen(true)
+                    .setAnimation(Splashy.Animation.SLIDE_IN_TOP_BOTTOM, DURATION / 2)
+                    .setProgressColor(R.color.white)
+                    .show();
 
+            new Handler().postDelayed(this::login, DURATION);
+            App.setFirstTime(false);
+        } else {
+            login();
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    private void login() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -38,7 +60,8 @@ public class LaunchActivity extends AppCompatActivity {
                             .setIsSmartLockEnabled(false)
                             .setAvailableProviders(providers)
                             .build(),
-                    RC_SIGN_IN);
+                    RC_SIGN_IN
+            );
         }
     }
 

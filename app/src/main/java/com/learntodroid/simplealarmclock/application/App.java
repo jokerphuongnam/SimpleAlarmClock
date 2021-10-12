@@ -70,4 +70,12 @@ public class App extends Application {
         }
         return false;
     }
+
+    private static boolean firstTime = true;
+    public static  boolean isFirstTime() {
+        return  firstTime;
+    }
+    public static void setFirstTime(boolean firstTime) {
+        App.firstTime = firstTime;
+    }
 }
