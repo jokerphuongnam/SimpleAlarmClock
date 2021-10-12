@@ -13,9 +13,27 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
     private final AlarmNetwork network;
     private final AlarmLocal local;
 
-    public DefaultAlarmRepositoryImpl(Application application) {
+    private static DefaultAlarmRepositoryImpl instance = null;
+    public static DefaultAlarmRepositoryImpl getInstance(Application application){
+        if(instance == null) {
+            instance = new DefaultAlarmRepositoryImpl(application);
+        }
+        return  instance;
+    }
+
+    private DefaultAlarmRepositoryImpl(Application application) {
         network = FirebaseAlarmImpl.getInstance();
         local = AlarmDatabase.getDatabase(application).alarmDao();
+    }
+
+    @Override
+    public void initListen() {
+        network.initListen();
+    }
+
+    @Override
+    public void onClearListener() {
+        network.onClearListener();
     }
 
     @Override

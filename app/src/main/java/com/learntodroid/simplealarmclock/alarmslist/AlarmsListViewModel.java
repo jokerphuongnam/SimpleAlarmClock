@@ -34,7 +34,8 @@ public class AlarmsListViewModel extends AndroidViewModel {
 
     public AlarmsListViewModel(@NonNull Application application) {
         super(application);
-        alarmRepository = new DefaultAlarmRepositoryImpl(application);
+        alarmRepository = DefaultAlarmRepositoryImpl.getInstance(application);
+
     }
 
     public void getAlarm() {

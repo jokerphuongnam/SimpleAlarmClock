@@ -21,7 +21,7 @@ public class RescheduleAlarmsService extends LifecycleService {
     @Override
     public void onCreate() {
         super.onCreate();
-        alarmRepository = new DefaultAlarmRepositoryImpl(getApplication());
+        alarmRepository = DefaultAlarmRepositoryImpl.getInstance(getApplication());
     }
 
     @Override

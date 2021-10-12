@@ -25,7 +25,7 @@ public class CreateAlarmViewModel extends AndroidViewModel {
 
     public CreateAlarmViewModel(@NonNull Application application) {
         super(application);
-        alarmRepository = new DefaultAlarmRepositoryImpl(application);
+        alarmRepository = DefaultAlarmRepositoryImpl.getInstance(application);
     }
 
     private Disposable insertDisposable;

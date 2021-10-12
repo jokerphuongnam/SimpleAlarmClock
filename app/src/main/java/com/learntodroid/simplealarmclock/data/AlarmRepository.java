@@ -6,6 +6,8 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface AlarmRepository {
+    void initListen();
+    void onClearListener();
     Single<String> insert(Alarm alarm);
     Single<String> update(Alarm alarm);
     Single<String> delete(Alarm alarm);

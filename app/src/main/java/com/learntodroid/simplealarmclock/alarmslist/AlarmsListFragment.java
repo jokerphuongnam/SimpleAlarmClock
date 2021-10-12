@@ -54,6 +54,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmRecyclerListAdapter = new AlarmRecyclerListAdapter(this, this);
         alarmsListViewModel = ViewModelProviders.of(this).get(AlarmsListViewModel.class);
         alarmsListViewModel.getAlarmsLiveData().observe(this, alarms -> {
+            refresh.setRefreshing(false);
             if (alarms != null) {
                 alarmRecyclerListAdapter.submitList(new ArrayList<>(alarms));
             } else {

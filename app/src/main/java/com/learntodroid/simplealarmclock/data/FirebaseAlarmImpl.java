@@ -2,11 +2,10 @@ package com.learntodroid.simplealarmclock.data;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,10 +23,16 @@ public class FirebaseAlarmImpl implements AlarmNetwork {
     private final FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private final PublishSubject<List<Alarm>> alarmsPublisher = PublishSubject.create();
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private ListenerRegistration getAlarmsListener = null;
 
     private FirebaseAlarmImpl() {
+
+    }
+
+    @Override
+    public void initListen() {
         if (auth.getUid() != null) {
-            fb
+            getAlarmsListener = fb
                     .collection("user")
                     .document(auth.getUid())
                     .collection("alarms")
@@ -44,6 +49,13 @@ public class FirebaseAlarmImpl implements AlarmNetwork {
                             alarmsPublisher.onNext(alarms);
                         }
                     }).start());
+        }
+    }
+
+    @Override
+    public void onClearListener() {
+        if (getAlarmsListener != null) {
+            getAlarmsListener.remove();
         }
     }
 
@@ -142,25 +154,26 @@ public class FirebaseAlarmImpl implements AlarmNetwork {
     @Override
     public void refresh() {
         if (auth.getUid() != null) {
-            new Thread(() -> {
-                Task<QuerySnapshot> task = fb
-                        .collection("user")
-                        .document(auth.getUid())
-                        .collection("alarms")
-                        .get();
-                QuerySnapshot queryDocumentSnapshots = task.getResult();
-                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                    Alarm alarm;
-                    List<Alarm> alarms = new ArrayList<>();
-                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
-                        alarm = ds.toObject(Alarm.class);
-                        if (alarm != null) {
-                            alarms.add(alarm);
-                        }
-                    }
-                    alarmsPublisher.onNext(alarms);
-                }
-            }).start();
+            fb
+                    .collection("user")
+                    .document(auth.getUid())
+                    .collection("alarms")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> new Thread(() -> {
+                                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                                    Alarm alarm;
+                                    List<Alarm> alarms = new ArrayList<>();
+                                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                                        alarm = ds.toObject(Alarm.class);
+                                        if (alarm != null) {
+                                            alarms.add(alarm);
+                                        }
+                                    }
+                                    alarmsPublisher.onNext(alarms);
+                                }
+                            }
+                            ).start()
+                    );
         }
     }
 }

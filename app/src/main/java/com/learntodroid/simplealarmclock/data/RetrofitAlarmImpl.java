@@ -45,6 +45,16 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
 
     private final Locale locale;
 
+    @Override
+    public void initListen() {
+
+    }
+
+    @Override
+    public void onClearListener() {
+
+    }
+
     private RetrofitAlarmImpl() {
         locale = Locale.getDefault();
     }

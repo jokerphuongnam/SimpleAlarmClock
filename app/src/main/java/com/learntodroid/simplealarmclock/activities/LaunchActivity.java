@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.application.App;
+import com.learntodroid.simplealarmclock.createalarm.CreateAlarmViewModel;
 import com.rbddevs.splashy.Splashy;
 
 import java.util.Collections;
@@ -22,6 +24,7 @@ import java.util.List;
 public class LaunchActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 199;
     private static final long DURATION = 1000;
+    private LaunchViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,12 +46,14 @@ public class LaunchActivity extends AppCompatActivity {
             login();
         }
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(LaunchViewModel.class);
     }
 
     private void login() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            viewModel.register();
         } else {
             List<AuthUI.IdpConfig> providers = Collections.singletonList(
                     new AuthUI.IdpConfig.GoogleBuilder().build()
@@ -74,6 +79,7 @@ public class LaunchActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                viewModel.register();
             } else {
                 finish();
             }
