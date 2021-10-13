@@ -36,10 +36,14 @@ public class UserInfoFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         viewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,

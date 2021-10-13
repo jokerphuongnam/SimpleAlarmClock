@@ -88,20 +88,7 @@ public class FirebaseAlarmImpl implements AlarmNetwork {
 
     @Override
     public Single<String> update(Alarm alarm) {
-        return Single.create(emitter -> {
-            if (auth.getUid() != null) {
-                fb
-                        .collection("user")
-                        .document(auth.getUid())
-                        .collection("alarms")
-                        .document(String.valueOf(alarm.getAlarmId()))
-                        .set(alarm, SetOptions.merge())
-                        .addOnSuccessListener(unused -> emitter.onSuccess(String.valueOf(alarm.getAlarmId())))
-                        .addOnFailureListener(emitter::onError);
-            } else {
-                emitter.onError(new NullPointerException());
-            }
-        });
+        return insert(alarm);
     }
 
     @Override
