@@ -37,17 +37,17 @@ public class FirebaseAlarmImpl implements AlarmNetwork {
                     .document(auth.getUid())
                     .collection("alarms")
                     .addSnapshotListener((queryDocumentSnapshots, e) -> new Thread(() -> {
+                        List<Alarm> alarms = new ArrayList<>();
                         if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                             Alarm alarm;
-                            List<Alarm> alarms = new ArrayList<>();
                             for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
                                 alarm = ds.toObject(Alarm.class);
                                 if (alarm != null) {
                                     alarms.add(alarm);
                                 }
                             }
-                            alarmsPublisher.onNext(alarms);
                         }
+                        alarmsPublisher.onNext(alarms);
                     }).start());
         }
     }
