@@ -1,7 +1,6 @@
 package com.learntodroid.simplealarmclock.data;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,22 +16,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -50,6 +44,16 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
     }
 
     private final Locale locale;
+
+    @Override
+    public void initListen() {
+
+    }
+
+    @Override
+    public void onClearListener() {
+
+    }
 
     private RetrofitAlarmImpl() {
         locale = Locale.getDefault();
@@ -99,28 +103,25 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
     }
 
     @Override
-    public Single<List<Alarm>> getAlarms() {
-        return getHandle().getAlarms(FirebaseAuth.getInstance().getUid());
+    public Observable<List<Alarm>> getAlarms() {
+        return getHandle().getAlarms(FirebaseAuth.getInstance().getUid()).toObservable();
     }
 
     @Override
     public void updateToken() {
         FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-                        // Get new FCM registration token
-                        String token = task.getResult();
-                        // gui token len db voi
-                        getHandle().updateToken(FirebaseAuth.getInstance().getUid(),token)
-                                .subscribeOn(Schedulers.io())
-                                .subscribe((s, throwable) -> {});
-                        Log.i(TAG, token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
                     }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    // gui token len db voi
+                    getHandle().updateToken(FirebaseAuth.getInstance().getUid(),token)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe((s, throwable) -> {});
+                    Log.i(TAG, token);
                 });
 
     }
@@ -191,5 +192,10 @@ public class RetrofitAlarmImpl implements AlarmNetwork {
                     .create(RetrofitHandle.class);
         }
         return handle;
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }

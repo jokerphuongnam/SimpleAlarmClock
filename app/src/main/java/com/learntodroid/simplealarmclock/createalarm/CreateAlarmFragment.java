@@ -3,13 +3,11 @@ package com.learntodroid.simplealarmclock.createalarm;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -73,7 +71,9 @@ public class CreateAlarmFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         try {
-            alarm = (Alarm) getArguments().getSerializable("alarm");
+            if (getArguments() != null) {
+                alarm = (Alarm) getArguments().getSerializable("alarm");
+            }
             timePicker.setHour(alarm.getHour());
             timePicker.setMinute(alarm.getMinute());
             title.setText(alarm.getTitle());
@@ -90,7 +90,7 @@ public class CreateAlarmFragment extends Fragment {
             fri.setChecked(alarm.isFriday());
             sat.setChecked(alarm.isSaturday());
             sun.setChecked(alarm.isSunday());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         recurring.setOnCheckedChangeListener((buttonView, isChecked) -> {

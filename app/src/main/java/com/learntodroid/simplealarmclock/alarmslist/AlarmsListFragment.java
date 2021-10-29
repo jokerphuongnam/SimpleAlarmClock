@@ -22,23 +22,21 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.data.Alarm;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-@SuppressLint("NonConstantResourceId")
+@SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
 public class AlarmsListFragment extends Fragment implements OnToggleAlarmListener, ItemTouchListener {
     private AlarmRecyclerListAdapter alarmRecyclerListAdapter;
     private AlarmsListViewModel alarmsListViewModel;
@@ -46,6 +44,8 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     RecyclerView alarmsRecyclerView;
     @BindView(R.id.extended_fab)
     ExtendedFloatingActionButton addAlarm;
+    @BindView(R.id.fragment_listalarms_refresh)
+    SwipeRefreshLayout refresh;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,32 +54,16 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmRecyclerListAdapter = new AlarmRecyclerListAdapter(this, this);
         alarmsListViewModel = ViewModelProviders.of(this).get(AlarmsListViewModel.class);
         alarmsListViewModel.getAlarmsLiveData().observe(this, alarms -> {
+            refresh.setRefreshing(false);
             if (alarms != null) {
                 alarmRecyclerListAdapter.submitList(new ArrayList<>(alarms));
+            } else {
+                alarmRecyclerListAdapter.submitList(new ArrayList<>());
             }
+            alarmRecyclerListAdapter.notifyDataSetChanged();
         });
-
-        alarmsListViewModel.getNoticeLiveData().observe(this, s -> {
-            Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show();
-        });
-
+        alarmsListViewModel.getNoticeLiveData().observe(this, s -> Toast.makeText(requireContext(), "Đã cập nhật thành công", Toast.LENGTH_SHORT).show());
         alarmsListViewModel.updateToken();
-
-//        FirebaseFirestore.getInstance().collection("alarms").addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-//                List<Alarm> alarms = queryDocumentSnapshots.toObjects(Alarm.class);
-//                alarmRecyclerListAdapter.submitList(alarms);
-//                Log.i("test", "chay vao day" + System.currentTimeMillis());
-//            }
-//        });
-
-
-    }
-
-    public void setTmp() {
-        Alarm alarm = new Alarm(0, 0, 0, "title", 0, false, false, false, false, false, false, false, false, false);
-        FirebaseFirestore.getInstance().collection("alarms").document(String.valueOf(alarm.getAlarmId())).set(alarm, SetOptions.merge());
     }
 
     @Nullable
@@ -92,6 +76,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         addAlarm.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment, null));
         new ItemTouchHelper(new AlarmsTouchHelperCallBack(this)).attachToRecyclerView(alarmsRecyclerView);
+        refresh.setOnRefreshListener(alarmsListViewModel::refresh);
         return view;
     }
 
@@ -108,9 +93,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             alarmsListViewModel.delete(alarm);
             alarmRecyclerListAdapter.notifyDataSetChanged();
         });
-        builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
-            alarmRecyclerListAdapter.notifyDataSetChanged();
-        });
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> alarmRecyclerListAdapter.notifyDataSetChanged());
         AlertDialog alertDialog = builder.create(); //create
         alertDialog.show(); //Show it.
     }
@@ -119,7 +102,9 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Log.i("ddd", "onViewCreated: " + auth.getCurrentUser().getUid());
+        if (auth.getCurrentUser() != null) {
+            Log.i("ddd", "onViewCreated: " + auth.getCurrentUser().getUid());
+        }
     }
 
     @Override
@@ -143,17 +128,17 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
     @Override
     public void onResume() {
         super.onResume();
-       alarmsListViewModel.getAlarm();
+        alarmsListViewModel.getAlarm();
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.khang.simplealarmclock");
         receiver = new UpdateAlarmReceiver();
-       Objects.requireNonNull(getContext()).registerReceiver(receiver, filter);
+        requireContext().registerReceiver(receiver, filter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Objects.requireNonNull(getContext()).unregisterReceiver(receiver);
+        requireContext().unregisterReceiver(receiver);
         receiver = null;
     }
 

@@ -7,20 +7,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.learntodroid.simplealarmclock.data.Alarm;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.learntodroid.simplealarmclock.fcm.RemoteService;
-
-import java.util.Random;
-
-import static android.content.ContentValues.TAG;
 
 public class App extends Application {
     public static final String CHANNEL_ID = "ALARM_SERVICE_CHANNEL";
@@ -28,16 +17,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        FirebaseFirestore.setLoggingEnabled(true);
         createNotificationChannnel();
         if (!isMyServiceRunning(RemoteService.class)) {
             startService(new Intent(getApplicationContext(), RemoteService.class));
         }
-
-
-
        // scheduleAlarmOnline(22,56,"title");
-
-
     }
 
     private void createNotificationChannnel() {
@@ -52,30 +37,29 @@ public class App extends Application {
             manager.createNotificationChannel(serviceChannel);
         }
     }
-    void scheduleAlarmOnline(int hour, int minute, String title) {
-        int alarmId = new Random().nextInt(Integer.MAX_VALUE);
-        Log.i("-----------", "inside function");
-        Alarm alarm = new Alarm(
-                alarmId,
-                hour,
-                minute,
-                title,
-                System.currentTimeMillis(),
-                true,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
-        );
 
-        // createAlarmViewModel.insert(alarm);
-
-        alarm.schedule(getApplicationContext());
-    }
+//    void scheduleAlarmOnline(int hour, int minute, String title) {
+//        int alarmId = new Random().nextInt(Integer.MAX_VALUE);
+//        Log.i("-----------", "inside function");
+//        Alarm alarm = new Alarm(
+//                alarmId,
+//                hour,
+//                minute,
+//                title,
+//                System.currentTimeMillis(),
+//                true,
+//                false,
+//                false,
+//                false,
+//                false,
+//                false,
+//                false,
+//                false,
+//                false
+//        );
+//        // createAlarmViewModel.insert(alarm);
+//        alarm.schedule(getApplicationContext());
+//    }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -85,5 +69,13 @@ public class App extends Application {
             }
         }
         return false;
+    }
+
+    private static boolean firstTime = true;
+    public static  boolean isFirstTime() {
+        return  firstTime;
+    }
+    public static void setFirstTime(boolean firstTime) {
+        App.firstTime = firstTime;
     }
 }

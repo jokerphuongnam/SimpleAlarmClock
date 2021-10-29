@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,14 +31,19 @@ public class UserInfoFragment extends DialogFragment {
     }
 
     FirebaseUser currentUser;
+    private UserInfoViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        viewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -53,18 +59,18 @@ public class UserInfoFragment extends DialogFragment {
         Uri photoUrl = currentUser.getPhotoUrl();
         ((TextView) view.findViewById(R.id.userEmail)).setText(email);
         ((TextView) view.findViewById(R.id.username)).setText(displayName);
-        Picasso.get().load(photoUrl.toString()).transform(new CircleTransform()).into(((ImageView) view.findViewById(R.id.userAvartar)));
+        if (photoUrl != null) {
+            Picasso.get().load(photoUrl.toString()).transform(new CircleTransform()).into(((ImageView) view.findViewById(R.id.userAvartar)));
+        }
         view.findViewById(R.id.signOutBtn).setOnClickListener(view1 -> {
             AuthUI.getInstance()
                     .signOut(requireActivity())
                     .addOnCompleteListener(task -> {
+                        viewModel.onClearListener();
                         Intent intent = new Intent(requireActivity(), LaunchActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     });
-
         });
-
-
     }
 }

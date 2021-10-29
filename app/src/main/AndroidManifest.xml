@@ -24,7 +24,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activities.LaunchActivity">
+        <activity android:name=".activities.LaunchActivity"
+            android:noHistory="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
