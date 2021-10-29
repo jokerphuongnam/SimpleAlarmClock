@@ -1,0 +1,178 @@
+{
+  "project_info": {
+    "project_number": "570922046860",
+    "firebase_url": "https://remotealarmclock-2f98a.firebaseio.com",
+    "project_id": "remotealarmclock-2f98a",
+    "storage_bucket": "remotealarmclock-2f98a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570922046860:android:2a9bdb6b6a0768c0dcf2a9",
+        "android_client_info": {
+          "package_name": "com.learntodroid.simplealarmclock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570922046860-6ut7br8f48hma6lcv0a2u0v4arv1e4tl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "f3518c5c25259488414af6475eee0e37be3266ae"
+          }
+        },
+        {
+          "client_id": "570922046860-8p00fvkuvg5ehik44mm2rq0ej6bplapj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "110f7fd90a832ba8a0799fb9436f66b157b26d70"
+          }
+        },
+        {
+          "client_id": "570922046860-bcjitegf1msqca3b55b754jpjgtklnes.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "afc37949aebc83deb4de1e15d892b881e0aa12fc"
+          }
+        },
+        {
+          "client_id": "570922046860-ei7g21p12m57kb2s770igqc0fctblrbi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "0f92fc963d7f3c381709a4806df6230ef05e94ee"
+          }
+        },
+        {
+          "client_id": "570922046860-fd3nk7rm8uo9f710oab506qg5upjcise.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "caa2ac6e9d8944c4bc87b6a543a50fea0095980c"
+          }
+        },
+        {
+          "client_id": "570922046860-ko1cjn0t6jncf5313fum5pahikdvet0e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "7e3c6879f55d51e915bad180e70d159395251665"
+          }
+        },
+        {
+          "client_id": "570922046860-qeq3j827angqfjlj894akaj1ch14moal.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "4b56ca1a8ceea611f2535ef552eaa3ee0a8cf241"
+          }
+        },
+        {
+          "client_id": "570922046860-slj6fjgo4odie0mbva7r3raqat9ttjf8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock",
+            "certificate_hash": "430cda2ea1aee0cf30c431cba125fb4f289bb5d6"
+          }
+        },
+        {
+          "client_id": "570922046860-1fllj5vii7ugcsf5vmtf3as9ab9dgrvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWEJpQ2OuDGWV6xGJ-A4GsnCD85AoL82M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570922046860-1fllj5vii7ugcsf5vmtf3as9ab9dgrvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570922046860:android:53bd8cdc75ca85d0dcf2a9",
+        "android_client_info": {
+          "package_name": "com.learntodroid.simplealarmclock.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570922046860-qnd1h9h31ob74kb8d8htl89tgjffb9mt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock.firebase",
+            "certificate_hash": "afc37949aebc83deb4de1e15d892b881e0aa12fc"
+          }
+        },
+        {
+          "client_id": "570922046860-1fllj5vii7ugcsf5vmtf3as9ab9dgrvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWEJpQ2OuDGWV6xGJ-A4GsnCD85AoL82M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570922046860-1fllj5vii7ugcsf5vmtf3as9ab9dgrvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570922046860:android:8cad1dd3554f5fb4dcf2a9",
+        "android_client_info": {
+          "package_name": "com.learntodroid.simplealarmclock.serviceoriented"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570922046860-gg67b6nk08p6f549djknu4d8gcn1qnjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learntodroid.simplealarmclock.serviceoriented",
+            "certificate_hash": "afc37949aebc83deb4de1e15d892b881e0aa12fc"
+          }
+        },
+        {
+          "client_id": "570922046860-1fllj5vii7ugcsf5vmtf3as9ab9dgrvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWEJpQ2OuDGWV6xGJ-A4GsnCD85AoL82M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570922046860-1fllj5vii7ugcsf5vmtf3as9ab9dgrvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

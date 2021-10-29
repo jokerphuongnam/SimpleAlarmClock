@@ -12,11 +12,28 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        buildConfigField "String", "SERVICE_ORIENTED_BUILD_VAR", "\"serviceOriented\""
+//        buildConfigField "String", "FIREBASE_BUILD_VAR", "\"firebase\""
+    }
+    flavorDimensions "asp"
+
+    productFlavors {
+        serviceOriented {
+            dimension "asp"
+            applicationId "com.learntodroid.simplealarmclock.serviceoriented"
+        }
+        firebase {
+            dimension "asp"
+            applicationId "com.learntodroid.simplealarmclock.firebase"
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            shrinkResources true
+            zipAlignEnabled true
         }
     }
     compileOptions {

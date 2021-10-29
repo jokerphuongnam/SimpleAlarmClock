@@ -1,28 +1,28 @@
 package com.learntodroid.simplealarmclock.application;
 
-import android.app.ActivityManager;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.learntodroid.simplealarmclock.fcm.RemoteService;
+import com.learntodroid.simplealarmclock.fcm.RemoteServiceManager;
 
 public class App extends Application {
     public static final String CHANNEL_ID = "ALARM_SERVICE_CHANNEL";
+
+    private static boolean firstTime = true;
+    public static boolean isFirstTime() {
+        return firstTime;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         FirebaseFirestore.setLoggingEnabled(true);
         createNotificationChannnel();
-        if (!isMyServiceRunning(RemoteService.class)) {
-            startService(new Intent(getApplicationContext(), RemoteService.class));
-        }
-       // scheduleAlarmOnline(22,56,"title");
+        RemoteServiceManager.startRemoteService(getApplicationContext());
+        // scheduleAlarmOnline(22,56,"title");
     }
 
     private void createNotificationChannnel() {
@@ -61,20 +61,6 @@ public class App extends Application {
 //        alarm.schedule(getApplicationContext());
 //    }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean firstTime = true;
-    public static  boolean isFirstTime() {
-        return  firstTime;
-    }
     public static void setFirstTime(boolean firstTime) {
         App.firstTime = firstTime;
     }

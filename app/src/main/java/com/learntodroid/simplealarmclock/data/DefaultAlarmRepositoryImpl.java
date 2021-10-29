@@ -1,6 +1,9 @@
 package com.learntodroid.simplealarmclock.data;
 
 import android.app.Application;
+import android.util.Log;
+
+import androidx.multidex.BuildConfig;
 
 import java.util.List;
 
@@ -22,7 +25,8 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
     }
 
     private DefaultAlarmRepositoryImpl(Application application) {
-        network = FirebaseAlarmImpl.getInstance();
+        Log.e("cccccccccccccc", BuildConfig.FLAVOR);
+        network = NetworkDI.getAlarmNetwork();
         local = AlarmDatabase.getDatabase(application).alarmDao();
     }
 
