@@ -43,7 +43,7 @@ public class DefaultAlarmRepositoryImpl implements AlarmRepository {
     @Override
     public void onClearListener() {
         network.onClearListener();
-        cacheLocal.deleteAll();
+        new Thread(cacheLocal::deleteAll).start();
     }
 
     @Override

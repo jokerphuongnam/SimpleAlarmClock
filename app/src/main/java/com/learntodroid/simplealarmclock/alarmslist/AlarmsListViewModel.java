@@ -102,7 +102,11 @@ public class AlarmsListViewModel extends AndroidViewModel {
         try {
             alarmRepository.refresh();
         } catch (NetworkChangeReceiver.NoConnectInternet noConnectInternet) {
-            alarmsLiveData.postValue(new ArrayList<>(alarmsLiveData.getValue()));
+            if(alarmsLiveData.getValue() != null) {
+                alarmsLiveData.postValue(new ArrayList<>(alarmsLiveData.getValue()));
+            } else {
+                alarmsLiveData.postValue(new ArrayList<>());
+            }
         }
     }
 

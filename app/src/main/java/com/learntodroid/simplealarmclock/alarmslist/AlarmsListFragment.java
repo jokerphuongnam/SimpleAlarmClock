@@ -32,6 +32,7 @@ import com.learntodroid.simplealarmclock.data.Alarm;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +56,15 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         alarmsListViewModel = ViewModelProviders.of(this).get(AlarmsListViewModel.class);
         alarmsListViewModel.getAlarmsLiveData().observe(this, alarms -> {
             refresh.setRefreshing(false);
+            int size = alarmRecyclerListAdapter.getItemCount();
+            for (int i = 0; i < size; i++) {
+                alarmRecyclerListAdapter.getAlarm(i).cancelAlarm(requireContext());
+            }
             if (alarms != null) {
+                alarms.stream().map((alarm) -> {
+                    alarm.schedule(requireContext());
+                    return null;
+                }).collect(Collectors.toList());
                 alarmRecyclerListAdapter.submitList(new ArrayList<>(alarms));
             } else {
                 alarmRecyclerListAdapter.submitList(new ArrayList<>());
@@ -90,6 +99,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         builder.setMessage("Delete alarm " + alarmRecyclerListAdapter.getAlarm(position).getTitle() + "?");
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
             Alarm alarm = alarmRecyclerListAdapter.getAlarm(position);
+            alarm.cancelAlarm(requireContext());
             alarmsListViewModel.delete(alarm);
             alarmRecyclerListAdapter.notifyDataSetChanged();
         });
@@ -133,6 +143,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         filter.addAction("com.khang.simplealarmclock");
         receiver = new UpdateAlarmReceiver();
         requireContext().registerReceiver(receiver, filter);
+        alarmsListViewModel.refresh();
     }
 
     @Override

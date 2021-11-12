@@ -30,7 +30,7 @@ public class UserInfoFragment extends DialogFragment {
 
     }
 
-    FirebaseUser currentUser;
+    private FirebaseUser currentUser;
     private UserInfoViewModel viewModel;
 
     @Override
@@ -54,6 +54,7 @@ public class UserInfoFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String email = currentUser.getEmail();
         String displayName = currentUser.getDisplayName();
         Uri photoUrl = currentUser.getPhotoUrl();
