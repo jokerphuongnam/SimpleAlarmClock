@@ -1,5 +1,7 @@
 package com.learntodroid.simplealarmclock.data;
 
+import com.learntodroid.simplealarmclock.broadcastreceiver.NetworkChangeReceiver;
+
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -13,5 +15,5 @@ public interface AlarmRepository {
     Single<String> delete(Alarm alarm);
     Observable<List<Alarm>> getAlarms();
     void updateToken();
-    void refresh();
+    void refresh() throws NetworkChangeReceiver.NoConnectInternet;
 }

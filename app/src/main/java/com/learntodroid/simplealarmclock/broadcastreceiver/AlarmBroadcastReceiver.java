@@ -100,6 +100,4 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             context.startService(intentService);
         }
     }
-
-
 }

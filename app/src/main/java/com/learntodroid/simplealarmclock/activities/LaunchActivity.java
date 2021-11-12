@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.learntodroid.simplealarmclock.R;
 import com.learntodroid.simplealarmclock.application.App;
-import com.learntodroid.simplealarmclock.createalarm.CreateAlarmViewModel;
 import com.rbddevs.splashy.Splashy;
 
 import java.util.Collections;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class LaunchActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 199;
-    private static final long DURATION = 1000;
+    private static final long DURATION = 1500;
     private LaunchViewModel viewModel;
 
     @Override
@@ -40,16 +39,15 @@ public class LaunchActivity extends AppCompatActivity {
                     .setProgressColor(R.color.white)
                     .show();
 
-            new Handler().postDelayed(this::login, DURATION);
-            App.setFirstTime(false);
+            new Handler().postDelayed(this::login, DURATION + 100);
         } else {
             login();
         }
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(LaunchViewModel.class);
     }
 
     private void login() {
+        viewModel = ViewModelProviders.of(this).get(LaunchViewModel.class);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -68,6 +66,7 @@ public class LaunchActivity extends AppCompatActivity {
                     RC_SIGN_IN
             );
         }
+        App.setFirstTime(false);
     }
 
     @Override

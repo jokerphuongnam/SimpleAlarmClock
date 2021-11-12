@@ -3,9 +3,11 @@ package com.learntodroid.simplealarmclock.application;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.IntentFilter;
 import android.os.Build;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.learntodroid.simplealarmclock.broadcastreceiver.NetworkChangeReceiver;
 import com.learntodroid.simplealarmclock.fcm.RemoteServiceManager;
 
 public class App extends Application {
@@ -22,7 +24,15 @@ public class App extends Application {
         FirebaseFirestore.setLoggingEnabled(true);
         createNotificationChannnel();
         RemoteServiceManager.startRemoteService(getApplicationContext());
+        createNetworkChangeReceiver();
         // scheduleAlarmOnline(22,56,"title");
+    }
+
+    private void createNetworkChangeReceiver() {
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+            registerReceiver(new NetworkChangeReceiver(), intentFilter);
+        }
     }
 
     private void createNotificationChannnel() {

@@ -8,12 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.learntodroid.simplealarmclock.broadcastreceiver.NetworkChangeReceiver;
 import com.learntodroid.simplealarmclock.data.Alarm;
 import com.learntodroid.simplealarmclock.data.AlarmRepository;
 import com.learntodroid.simplealarmclock.data.DefaultAlarmRepositoryImpl;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -97,7 +99,11 @@ public class AlarmsListViewModel extends AndroidViewModel {
     }
 
     public void refresh(){
-        alarmRepository.refresh();
+        try {
+            alarmRepository.refresh();
+        } catch (NetworkChangeReceiver.NoConnectInternet noConnectInternet) {
+            alarmsLiveData.postValue(new ArrayList<>(alarmsLiveData.getValue()));
+        }
     }
 
     @Override
