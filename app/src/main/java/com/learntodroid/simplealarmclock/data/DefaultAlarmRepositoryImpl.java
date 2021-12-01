@@ -1,7 +1,6 @@
 package com.learntodroid.simplealarmclock.data;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 
 import com.learntodroid.simplealarmclock.broadcastreceiver.NetworkChangeReceiver;

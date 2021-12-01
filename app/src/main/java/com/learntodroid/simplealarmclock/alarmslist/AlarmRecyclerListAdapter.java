@@ -1,5 +1,6 @@
 package com.learntodroid.simplealarmclock.alarmslist;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,13 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.learntodroid.simplealarmclock.data.Alarm;
 import com.learntodroid.simplealarmclock.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.learntodroid.simplealarmclock.data.Alarm;
 
 public class AlarmRecyclerListAdapter extends ListAdapter<Alarm, AlarmViewHolder> {
 
@@ -42,6 +39,7 @@ public class AlarmRecyclerListAdapter extends ListAdapter<Alarm, AlarmViewHolder
     public void onBindViewHolder(@NonNull AlarmViewHolder holder, int position) {
         Alarm alarm = getItem(position);
         holder.bind(alarm);
+        Log.e(alarm.getTitle(), String.valueOf(alarm.isStarted()));
     }
 
 //    @NonNull

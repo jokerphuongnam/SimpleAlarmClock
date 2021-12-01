@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -43,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("userInfo");
+        if (prev != null) {
+            try {
+                ((DialogFragment) prev).dismiss();
+            } catch (Exception e) {
+
+            }
+        }
     }
 
     @Override

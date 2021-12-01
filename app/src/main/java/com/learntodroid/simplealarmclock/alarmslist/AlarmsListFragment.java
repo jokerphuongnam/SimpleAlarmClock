@@ -41,6 +41,9 @@ import butterknife.ButterKnife;
 public class AlarmsListFragment extends Fragment implements OnToggleAlarmListener, ItemTouchListener {
     private AlarmRecyclerListAdapter alarmRecyclerListAdapter;
     private AlarmsListViewModel alarmsListViewModel;
+    private UpdateAlarmReceiver receiver;
+    private boolean isFirstTime = true;
+
     @BindView(R.id.fragment_listalarms_recylerView)
     RecyclerView alarmsRecyclerView;
     @BindView(R.id.extended_fab)
@@ -62,10 +65,12 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             }
             if (alarms != null) {
                 alarms.stream().map((alarm) -> {
-                    alarm.schedule(requireContext());
+                    if(alarm.isStarted()) {
+                        alarm.schedule(requireContext());
+                    }
                     return null;
                 }).collect(Collectors.toList());
-                alarmRecyclerListAdapter.submitList(new ArrayList<>(alarms));
+                alarmRecyclerListAdapter.submitList(alarms);
             } else {
                 alarmRecyclerListAdapter.submitList(new ArrayList<>());
             }
@@ -104,6 +109,7 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
             alarmRecyclerListAdapter.notifyDataSetChanged();
         });
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> alarmRecyclerListAdapter.notifyDataSetChanged());
+        builder.setOnCancelListener(dialog -> alarmRecyclerListAdapter.notifyDataSetChanged());
         AlertDialog alertDialog = builder.create(); //create
         alertDialog.show(); //Show it.
     }
@@ -134,7 +140,6 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment, bundle);
     }
 
-    UpdateAlarmReceiver receiver;
     @Override
     public void onResume() {
         super.onResume();
@@ -143,7 +148,11 @@ public class AlarmsListFragment extends Fragment implements OnToggleAlarmListene
         filter.addAction("com.khang.simplealarmclock");
         receiver = new UpdateAlarmReceiver();
         requireContext().registerReceiver(receiver, filter);
-        alarmsListViewModel.refresh();
+        if (!isFirstTime) {
+            alarmsListViewModel.refresh();
+        } else {
+            isFirstTime = false;
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.learntodroid.simplealarmclock.alarmslist;
 import static java.lang.String.format;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
